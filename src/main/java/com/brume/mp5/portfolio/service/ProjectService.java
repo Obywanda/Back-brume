@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProjectService {
@@ -29,7 +30,23 @@ public class ProjectService {
         return this.projectRepository.findAll();
     }
 
+    public Project lireProject(int id) {
+        Optional<Project> optionalProject = this.projectRepository.findById(id);
+        return optionalProject.orElse(null);
+    }
+
     public void supprimerProject(int id) {
         this.projectRepository.deleteById(id);
     }
+
+    public void modifierProject(int id, Project project) {
+        Project projectDansLaBDD = this.lireProject(id);
+        if (projectDansLaBDD.getId() == project.getId()) {
+            projectDansLaBDD.setTitle(project.getTitle());
+            projectDansLaBDD.setVideo_url(project.getVideo_url());
+            this.projectRepository.save(projectDansLaBDD);
+        }
+    }
+
+
 }

@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -19,7 +21,7 @@ public class ProjectController {
         this.projectService = projectService;
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(CREATED)
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
     public void cree(@RequestBody Project project) {
         this.projectService.cree(project);
@@ -30,8 +32,21 @@ public class ProjectController {
         return this.projectService.rechercher();
     }
 
+    @GetMapping(path = "{id}")
+    public @ResponseBody Project lireProject(@PathVariable("id") int id) {
+        return this.projectService.lireProject(id);
+    }
+
+    @ResponseStatus(NO_CONTENT)
     @DeleteMapping(path = "{id}")
     public void supprimerProject(@PathVariable("id") int id) {
         this.projectService.supprimerProject(id);
+    }
+
+    @ResponseStatus(NO_CONTENT)
+    @PutMapping(path = "{id}", consumes = APPLICATION_JSON_VALUE)
+    public void modifierProject(@PathVariable("id") int id, @RequestBody Project project) {
+        this.projectService.modifierProject(id, project);
+
     }
 }
